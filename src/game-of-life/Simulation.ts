@@ -15,6 +15,7 @@ export class Simulation {
   }
 
   add(x: number, y: number): SimulationResult {
+    console.log('add');
     this.points = this.history[this.historyIndex - 1].points;
     this.points.set(y, (this.points.get(y) ?? new Set<number>()).add(x));
 
@@ -22,6 +23,18 @@ export class Simulation {
     this.historyIndex = 0;
     this.frame = 0;
     return this.addHistory(this.toSimulationResult(this.frame, this.points));
+  }
+
+  remove(x: number, y: number): SimulationResult {
+    console.log('remove');
+    if (this.points.get(y)?.delete(x)) {
+      this.history = [];
+      this.historyIndex = 0;
+      this.frame = 0;
+      return this.addHistory(this.toSimulationResult(this.frame, this.points));
+    }
+
+    return this.history[this.historyIndex - 1];
   }
 
   has(x: number, y: number) {

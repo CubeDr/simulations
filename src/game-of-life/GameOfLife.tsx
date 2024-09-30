@@ -47,6 +47,16 @@ export default function GameOfLife() {
     setSimulationResult(simulationRef.current.add(x, y));
   }, []);
 
+  const onRightClick = useCallback((viewportX: number, viewportY: number) => {
+    // Do not mutate when simulation is playing.
+    if (playTimer != null) return;
+
+    const x = Math.floor(viewportX);
+    const y = Math.floor(viewportY);
+
+    setSimulationResult(simulationRef.current.remove(x, y));
+  }, []);
+
   // Render snapshot
   useEffect(() => {
     const clientWidth = clientWidthRef.current;
@@ -107,7 +117,8 @@ export default function GameOfLife() {
         snapshot={snapshot}
         onViewportChanged={onViewportChanged}
         onHover={onHover}
-        onClick={onClick} />
+        onClick={onClick}
+        onRightClick={onRightClick} />
       <span className={styles.Frame}># {simulationResult?.frame ?? 0}</span>
       <button onClick={prev} disabled={(simulationResult?.frame ?? 0) === 0 || playTimer != null}>Prev</button>
       <button onClick={play}>{playTimer == null ? 'Play' : 'Pause'}</button>

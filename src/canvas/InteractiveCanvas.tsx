@@ -9,6 +9,7 @@ interface Props {
   onViewportChanged: (viewport: Viewport, clientWidth: number, clientHeight: number) => void;
   onHover: (viewportX: number, viewportY: number) => void;
   onClick: (viewportX: number, viewportY: number) => void;
+  onRightClick: (viewportX: number, viewportY: number) => void;
 }
 
 export default function InteractiveCanvas({
@@ -17,6 +18,7 @@ export default function InteractiveCanvas({
   onViewportChanged,
   onHover,
   onClick,
+  onRightClick,
 }: Props) {
   const [viewport, setViewport] = useState(initialViewport);
 
@@ -48,6 +50,8 @@ export default function InteractiveCanvas({
   }, [viewport, onViewportChanged]);
 
   function onPointerDown(e: MouseEvent) {
+    if (e.button !== 0) return;
+
     isPointerDownRef.current = true;
     dragPrevXRef.current = e.screenX;
     dragPrevYRef.current = e.screenY;
@@ -56,9 +60,18 @@ export default function InteractiveCanvas({
   function onPointerUp(e: MouseEvent) {
     if (!isPointerDragRef.current) {
       const { left, top } = containerRef.current!.getBoundingClientRect();
-      onClick(
-        viewportX(e.clientX - left),
-        viewportY(e.clientY - top));
+      switch (e.button) {
+        case 0: // Left click
+          onClick(
+            viewportX(e.clientX - left),
+            viewportY(e.clientY - top));
+          break;
+        case 2: // Right click
+          onRightClick(
+            viewportX(e.clientX - left),
+            viewportY(e.clientY - top));
+          return;
+      }
     }
 
     isPointerDownRef.current = false;
@@ -97,6 +110,7 @@ export default function InteractiveCanvas({
       onPointerDown={onPointerDown}
       onPointerUp={onPointerUp}
       onPointerMove={onPointerMove}
+      onContextMenu={e => e.preventDefault()}
       style={{
         cursor: 'none',
         margin: '0 -18px',
