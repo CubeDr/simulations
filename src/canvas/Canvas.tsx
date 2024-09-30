@@ -16,7 +16,7 @@ export default function Canvas({ snapshot, onResize }: Props) {
 
   const onWindowResize = useCallback(() => {
     const width = document.documentElement.clientWidth;
-    const height = width / 2;
+    const height = document.documentElement.clientHeight * 0.7;
 
     if (widthRef.current === width && heightRef.current === height) return;
 
