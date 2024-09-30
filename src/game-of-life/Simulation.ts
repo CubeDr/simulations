@@ -15,7 +15,6 @@ export class Simulation {
   }
 
   add(x: number, y: number): SimulationResult {
-    console.log('add');
     this.points = this.history[this.historyIndex - 1].points;
     this.points.set(y, (this.points.get(y) ?? new Set<number>()).add(x));
 
@@ -26,7 +25,6 @@ export class Simulation {
   }
 
   remove(x: number, y: number): SimulationResult {
-    console.log('remove');
     if (this.points.get(y)?.delete(x)) {
       this.history = [];
       this.historyIndex = 0;

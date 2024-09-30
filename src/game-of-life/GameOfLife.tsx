@@ -45,7 +45,7 @@ export default function GameOfLife() {
     const y = Math.floor(viewportY);
 
     setSimulationResult(simulationRef.current.add(x, y));
-  }, []);
+  }, [playTimer]);
 
   const onRightClick = useCallback((viewportX: number, viewportY: number) => {
     // Do not mutate when simulation is playing.
@@ -55,7 +55,7 @@ export default function GameOfLife() {
     const y = Math.floor(viewportY);
 
     setSimulationResult(simulationRef.current.remove(x, y));
-  }, []);
+  }, [playTimer]);
 
   // Render snapshot
   useEffect(() => {
