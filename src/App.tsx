@@ -1,10 +1,10 @@
-import { BrowserRouter, Link, Route, Routes } from 'react-router-dom';
+import { HashRouter, Link, Route, Routes } from 'react-router-dom';
 import styles from './App.module.css';
 import GameOfLife from './game-of-life/GameOfLife';
 
 function App() {
   return (
-    <BrowserRouter>
+    <HashRouter>
       <div className={styles.App}>
         <header className={styles.Header}>
           <h1><a className={styles.Title} href="/">Simulations</a></h1>
@@ -17,7 +17,7 @@ function App() {
           </Route>
         </Routes>
       </div>
-    </BrowserRouter>
+    </HashRouter>
   );
 }
 
