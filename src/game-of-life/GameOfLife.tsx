@@ -4,6 +4,7 @@ import Snapshot from '../canvas/Snapshot';
 import Viewport from '../canvas/Viewport';
 import Point from './Point';
 import { Simulation } from './Simulation';
+import SimulationResult from './SimulationResult';
 
 export default function GameOfLife() {
   const [snapshot, setSnapshot] = useState(new Snapshot(new Array(500).fill(new Array(500).fill(0x101213ff))));
@@ -15,6 +16,7 @@ export default function GameOfLife() {
   const clientHeightRef = useRef(0);
 
   const simulationRef = useRef(new Simulation());
+  const [simulationResult, setSimulationResult] = useState<SimulationResult | null>(null);
 
   const onViewportChanged = useCallback((viewport: Viewport, clientWidth: number, clientHeight: number) => {
     setViewport(viewport);
@@ -57,7 +59,7 @@ export default function GameOfLife() {
         if (viewportX === hoverPoint?.x && viewportY === hoverPoint?.y) {
           // Hover
           data[y][x] = 0xaaaaaaff;
-        } else if (simulationRef.current.has(viewportX, viewportY)) {
+        } else if ((simulationResult ?? simulationRef.current).has(viewportX, viewportY)) {
           // Filled
           data[y][x] = 0xffffffff;
         } else {
@@ -68,7 +70,11 @@ export default function GameOfLife() {
     }
 
     setSnapshot(new Snapshot(data));
-  }, [viewport, hoverPoint, setSnapshot]);
+  }, [viewport, hoverPoint, simulationResult, setSnapshot]);
+
+  function next() {
+    setSimulationResult(simulationRef.current.next());
+  }
 
   return (
     <>
@@ -78,6 +84,8 @@ export default function GameOfLife() {
         onViewportChanged={onViewportChanged}
         onHover={onHover}
         onClick={onClick} />
+      <span>{simulationResult?.frame ?? 0}</span>
+      <button onClick={next}>Next</button>
     </>
   );
 }

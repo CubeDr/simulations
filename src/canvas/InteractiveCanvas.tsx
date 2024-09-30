@@ -97,7 +97,7 @@ export default function InteractiveCanvas({
       onPointerMove={onPointerMove}
       style={{
         cursor: 'none',
-        margin: '-18px',
+        margin: '0 -18px',
       }}>
       <Canvas snapshot={snapshot} onResize={onCanvasResize} />
     </div>
