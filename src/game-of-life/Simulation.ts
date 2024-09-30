@@ -1,11 +1,27 @@
-import SimulationResult from "./SimulationResult";
+import SimulationResult from './SimulationResult';
+
+type SimulationResultWithPoints = SimulationResult & {
+  points: Map<number, Set<number>>;
+};
 
 export class Simulation {
   private frame = 0;
   private points = new Map<number, Set<number>>();
+  private history: SimulationResultWithPoints[] = [];
+  private historyIndex = 0;
 
-  add(x: number, y: number) {
+  constructor() {
+    this.addHistory(this.toSimulationResult(0, this.points));
+  }
+
+  add(x: number, y: number): SimulationResult {
+    this.points = this.history[this.historyIndex - 1].points;
     this.points.set(y, (this.points.get(y) ?? new Set<number>()).add(x));
+
+    this.history = [];
+    this.historyIndex = 0;
+    this.frame = 0;
+    return this.addHistory(this.toSimulationResult(this.frame, this.points));
   }
 
   has(x: number, y: number) {
@@ -13,6 +29,10 @@ export class Simulation {
   }
 
   next(): SimulationResult {
+    if (this.historyIndex < this.history.length) {
+      return this.history[this.historyIndex++];
+    }
+
     const nextCounts = new Map<number, Map<number, number>>();
 
     this.points.forEach((points, y) => {
@@ -42,10 +62,30 @@ export class Simulation {
     });
     this.points = nextPoints;
 
+    return this.addHistory(this.toSimulationResult(++this.frame, nextPoints));
+  }
+
+  prev(): SimulationResult | null {
+    if (this.historyIndex <= 1) return null;
+    return this.history[--this.historyIndex - 1];
+  }
+
+  private toSimulationResult(frame: number, points: Map<number, Set<number>>) {
     return {
-      frame: ++this.frame,
-      has: (x: number, y: number) => nextPoints.get(y)?.has(x) ?? false
-      ,
+      frame,
+      points,
+      has: (x: number, y: number) => points.get(y)?.has(x) ?? false,
     };
+  }
+
+  private addHistory(simulationResult: SimulationResultWithPoints) {
+    if (this.history.length > this.historyIndex) {
+      this.history = this.history.slice(0, this.historyIndex);
+    }
+
+    this.history.push(simulationResult);
+    this.historyIndex++;
+
+    return simulationResult;
   }
 }

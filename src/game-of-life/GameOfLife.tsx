@@ -39,7 +39,7 @@ export default function GameOfLife() {
     const x = Math.floor(viewportX);
     const y = Math.floor(viewportY);
 
-    simulationRef.current.add(x, y);
+    setSimulationResult(simulationRef.current.add(x, y));
   }, []);
 
   // Render snapshot
@@ -73,6 +73,13 @@ export default function GameOfLife() {
     setSnapshot(new Snapshot(data));
   }, [viewport, hoverPoint, simulationResult, setSnapshot]);
 
+  function prev() {
+    const snapshot = simulationRef.current.prev();
+    if (snapshot != null) {
+      setSimulationResult(snapshot);
+    }
+  }
+
   function next() {
     setSimulationResult(simulationRef.current.next());
   }
@@ -86,6 +93,7 @@ export default function GameOfLife() {
         onHover={onHover}
         onClick={onClick} />
       <span className={styles.Frame}># {simulationResult?.frame ?? 0}</span>
+      <button onClick={prev} disabled={(simulationResult?.frame ?? 0) === 0}>Prev</button>
       <button onClick={next}>Next</button>
     </div>
   );
