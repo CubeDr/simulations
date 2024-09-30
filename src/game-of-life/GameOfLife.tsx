@@ -103,7 +103,7 @@ export default function GameOfLife() {
     if (playTimer == null) {
       setPlayTimer(setInterval(() => {
         next();
-      }, 1000));
+      }, 500));
     } else {
       clearInterval(playTimer);
       setPlayTimer(null);
