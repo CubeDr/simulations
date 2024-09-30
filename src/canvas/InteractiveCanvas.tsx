@@ -8,6 +8,7 @@ interface Props {
   viewport: Viewport;
   onViewportChanged: (viewport: Viewport, clientWidth: number, clientHeight: number) => void;
   onHover: (viewportX: number, viewportY: number) => void;
+  onClick: (viewportX: number, viewportY: number) => void;
 }
 
 export default function InteractiveCanvas({
@@ -15,12 +16,14 @@ export default function InteractiveCanvas({
   viewport: initialViewport,
   onViewportChanged,
   onHover,
+  onClick,
 }: Props) {
   const [viewport, setViewport] = useState(initialViewport);
 
   const containerRef = useRef<HTMLDivElement>(null);
 
   const isPointerDownRef = useRef(false);
+  const isPointerDragRef = useRef(false);
   const dragPrevXRef = useRef(0);
   const dragPrevYRef = useRef(0);
 
@@ -50,8 +53,15 @@ export default function InteractiveCanvas({
     dragPrevYRef.current = e.screenY;
   }
 
-  function onPointerUp() {
+  function onPointerUp(e: MouseEvent) {
+    if (!isPointerDragRef.current) {
+      onClick(
+        viewportX(e.clientX - containerRef.current!.offsetLeft),
+        viewportY(e.clientY - containerRef.current!.offsetTop));
+    }
+
     isPointerDownRef.current = false;
+    isPointerDragRef.current = false;
   }
 
   function onPointerMove(e: MouseEvent) {
@@ -60,6 +70,7 @@ export default function InteractiveCanvas({
       return;
     }
 
+    isPointerDragRef.current = true;
     const dx = e.screenX - dragPrevXRef.current;
     const dy = e.screenY - dragPrevYRef.current;
 
