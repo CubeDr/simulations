@@ -25,7 +25,9 @@ export class Simulation {
   }
 
   remove(x: number, y: number): SimulationResult {
-    if (this.points.get(y)?.delete(x)) {
+    const points = this.history[this.historyIndex - 1].points;
+    if (points.get(y)?.delete(x)) {
+      this.points = points;
       this.history = [];
       this.historyIndex = 0;
       this.frame = 0;
