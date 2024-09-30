@@ -1,4 +1,4 @@
-import { MouseEvent, useEffect, useRef, useState } from 'react';
+import { MouseEvent, useCallback, useEffect, useRef, useState } from 'react';
 import Canvas from './Canvas';
 import Snapshot from './Snapshot';
 import Viewport from './Viewport';
@@ -16,6 +16,12 @@ export default function InteractiveCanvas({ snapshot, onViewportChanged }: Props
   const isPointerDownRef = useRef(false);
   const dragPrevXRef = useRef(0);
   const dragPrevYRef = useRef(0);
+
+  const onCanvasResize = useCallback((width: number, height: number, originalWidth?: number, originalHeight?: number) => {
+    if (originalWidth == null || originalHeight == null) return;
+
+    setViewport(viewport => viewport.resize(viewport.width * width / originalWidth, viewport.height * height / originalHeight));
+  }, []);
 
   useEffect(() => {
     onViewportChanged(viewport, containerRef.current!.offsetWidth, containerRef.current!.offsetHeight);
@@ -55,7 +61,7 @@ export default function InteractiveCanvas({ snapshot, onViewportChanged }: Props
       style={{
         margin: '-18px',
       }}>
-      <Canvas snapshot={snapshot} />
+      <Canvas snapshot={snapshot} onResize={onCanvasResize} />
     </div>
   );
 }

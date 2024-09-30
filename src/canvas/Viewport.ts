@@ -19,4 +19,13 @@ export default class Viewport {
       this.height,
     );
   }
+
+  resize(width: number, height: number): Viewport {
+    return new Viewport(
+      this.offsetX,
+      this.offsetY,
+      width,
+      height,
+    );
+  }
 }
