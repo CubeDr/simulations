@@ -7,3 +7,30 @@
   left: 8px;
   top: 8px;
 }
+
+.Control {
+  text-align: center;
+  margin-top: 14px;
+}
+
+.Button {
+  background: none;
+  border: none;
+  color: #39ace7;
+  padding: 0;
+  transition: transform 120ms;
+  width: 60px;
+  height: 60px;
+}
+
+.Button:not(:disabled) {
+  cursor: pointer;
+}
+
+.Button:hover:not(:disabled) {
+  transform: scale(1.08);
+}
+
+.Button:disabled {
+  color: #909090;
+}
