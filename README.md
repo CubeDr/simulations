@@ -1,9 +1,12 @@
 # Simulations [![](https://img.shields.io/static/v1?label=Sponsor&message=%E2%9D%A4&logo=GitHub&color=%23fe8e86)](https://github.com/sponsors/CubeDr)
 https://simulation.hyuni.dev
 
+A React.js and TypeScript implementation of various simulations that runs on web.
+
 ## Supported Simulations
 ### [Conway's Game of Life](https://simulation.hyuni.dev/#/game-of-life)
-A React.js and TypeScript implementation of Conway's Game of Life, allowing interactive exploration of emergent patterns through a user-friendly interface.
+An interactive simulation of Conway's Game of Life, allowing interactive exploration of emergent patterns through a user-friendly interface.
+
 ![스크린샷 2024-10-01 011350](https://github.com/user-attachments/assets/735d52d2-78da-4a77-a9a8-6b7285fcf25f)
 
 #### Featured
