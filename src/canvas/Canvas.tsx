@@ -1,14 +1,14 @@
 import { useCallback, useEffect, useRef } from 'react';
-import styles from './Canvas.module.css';
 import Snapshot from './Snapshot';
 
 export default function Canvas({ snapshot }: { snapshot: Snapshot }) {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const contextRef = useRef<CanvasRenderingContext2D>();
   const imageDataRef = useRef<ImageData>();
 
   const render = useCallback(() => {
     if (imageDataRef.current == null) return;
+
     const width = imageDataRef.current.width;
     const height = imageDataRef.current.height;
     const data = imageDataRef.current.data;
@@ -46,6 +46,7 @@ export default function Canvas({ snapshot }: { snapshot: Snapshot }) {
 
     window.addEventListener('load', resizeCanvas);
     window.addEventListener('resize', resizeCanvas);
+
     return () => {
       window.removeEventListener('load', resizeCanvas);
       window.removeEventListener('resize', resizeCanvas);
@@ -56,5 +57,5 @@ export default function Canvas({ snapshot }: { snapshot: Snapshot }) {
     render();
   }, [snapshot, render]);
 
-  return <canvas ref={canvasRef} className={styles.Canvas} />;
+  return <canvas ref={canvasRef} />;
 }
