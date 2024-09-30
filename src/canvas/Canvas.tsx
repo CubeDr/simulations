@@ -47,6 +47,8 @@ export default function Canvas({ snapshot }: { snapshot: Snapshot }) {
     window.addEventListener('load', resizeCanvas);
     window.addEventListener('resize', resizeCanvas);
 
+    resizeCanvas();
+
     return () => {
       window.removeEventListener('load', resizeCanvas);
       window.removeEventListener('resize', resizeCanvas);
