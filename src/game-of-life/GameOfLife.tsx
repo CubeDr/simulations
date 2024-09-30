@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import InteractiveCanvas from '../canvas/InteractiveCanvas';
 import Snapshot from '../canvas/Snapshot';
 import Viewport from '../canvas/Viewport';
+import styles from './GameOfLife.module.css';
 import Point from './Point';
 import { Simulation } from './Simulation';
 import SimulationResult from './SimulationResult';
@@ -77,15 +78,15 @@ export default function GameOfLife() {
   }
 
   return (
-    <>
+    <div className={styles.GameOfLife}>
       <InteractiveCanvas
         viewport={viewport}
         snapshot={snapshot}
         onViewportChanged={onViewportChanged}
         onHover={onHover}
         onClick={onClick} />
-      <span>{simulationResult?.frame ?? 0}</span>
+      <span className={styles.Frame}># {simulationResult?.frame ?? 0}</span>
       <button onClick={next}>Next</button>
-    </>
+    </div>
   );
 }

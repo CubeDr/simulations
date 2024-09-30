@@ -55,9 +55,10 @@ export default function InteractiveCanvas({
 
   function onPointerUp(e: MouseEvent) {
     if (!isPointerDragRef.current) {
+      const { left, top } = containerRef.current!.getBoundingClientRect();
       onClick(
-        viewportX(e.clientX - containerRef.current!.offsetLeft),
-        viewportY(e.clientY - containerRef.current!.offsetTop));
+        viewportX(e.clientX - left),
+        viewportY(e.clientY - top));
     }
 
     isPointerDownRef.current = false;
@@ -85,9 +86,10 @@ export default function InteractiveCanvas({
   }
 
   function onPointerHover(e: MouseEvent) {
+    const { left, top } = containerRef.current!.getBoundingClientRect();
     onHover(
-      viewportX(e.clientX - containerRef.current!.offsetLeft),
-      viewportY(e.clientY - containerRef.current!.offsetTop));
+      viewportX(e.clientX - left),
+      viewportY(e.clientY - top));
   }
 
   return (
