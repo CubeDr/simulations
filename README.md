@@ -22,5 +22,3 @@ A React.js and TypeScript implementation of Conway's Game of Life, allowing inte
   * Preserve your simulation progress using browser cache, seamlessly resuming from where you left off even after closing the application.
 * Optimized Performance
   * Separates the UI thread from the simulation logic using Web Workers, ensuring smooth and responsive interactions even during complex computations.
- 
-<iframe src="https://github.com/sponsors/CubeDr/card" title="Sponsor CubeDr" height="225" width="600" style="border: 0;"></iframe>
