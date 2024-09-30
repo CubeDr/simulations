@@ -19,6 +19,8 @@ export default function GameOfLife() {
   const simulationRef = useRef(new Simulation());
   const [simulationResult, setSimulationResult] = useState<SimulationResult | null>(null);
 
+  const [playTimer, setPlayTimer] = useState<NodeJS.Timer | null>(null);
+
   const onViewportChanged = useCallback((viewport: Viewport, clientWidth: number, clientHeight: number) => {
     setViewport(viewport);
     clientWidthRef.current = clientWidth;
@@ -36,6 +38,9 @@ export default function GameOfLife() {
   }, [hoverPoint, setHoverPoint]);
 
   const onClick = useCallback((viewportX: number, viewportY: number) => {
+    // Do not mutate when simulation is playing.
+    if (playTimer != null) return;
+
     const x = Math.floor(viewportX);
     const y = Math.floor(viewportY);
 
@@ -84,6 +89,17 @@ export default function GameOfLife() {
     setSimulationResult(simulationRef.current.next());
   }
 
+  function play() {
+    if (playTimer == null) {
+      setPlayTimer(setInterval(() => {
+        next();
+      }, 1000));
+    } else {
+      clearInterval(playTimer);
+      setPlayTimer(null);
+    }
+  }
+
   return (
     <div className={styles.GameOfLife}>
       <InteractiveCanvas
@@ -93,8 +109,9 @@ export default function GameOfLife() {
         onHover={onHover}
         onClick={onClick} />
       <span className={styles.Frame}># {simulationResult?.frame ?? 0}</span>
-      <button onClick={prev} disabled={(simulationResult?.frame ?? 0) === 0}>Prev</button>
-      <button onClick={next}>Next</button>
+      <button onClick={prev} disabled={(simulationResult?.frame ?? 0) === 0 || playTimer != null}>Prev</button>
+      <button onClick={play}>{playTimer == null ? 'Play' : 'Pause'}</button>
+      <button onClick={next} disabled={playTimer != null}>Next</button>
     </div>
   );
 }
