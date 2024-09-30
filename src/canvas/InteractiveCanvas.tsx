@@ -74,7 +74,9 @@ export default function InteractiveCanvas({
   }
 
   function onPointerHover(e: MouseEvent) {
-    onHover(viewportX(e.clientX), viewportY(e.clientY));
+    onHover(
+      viewportX(e.clientX - containerRef.current!.offsetLeft),
+      viewportY(e.clientY - containerRef.current!.offsetTop));
   }
 
   return (
@@ -83,6 +85,7 @@ export default function InteractiveCanvas({
       onPointerUp={onPointerUp}
       onPointerMove={onPointerMove}
       style={{
+        cursor: 'none',
         margin: '-18px',
       }}>
       <Canvas snapshot={snapshot} onResize={onCanvasResize} />
