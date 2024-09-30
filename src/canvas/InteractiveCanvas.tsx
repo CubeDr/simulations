@@ -5,12 +5,18 @@ import Viewport from './Viewport';
 
 interface Props {
   snapshot: Snapshot;
+  viewport: Viewport;
   onViewportChanged: (viewport: Viewport, clientWidth: number, clientHeight: number) => void;
   onHover: (viewportX: number, viewportY: number) => void;
 }
 
-export default function InteractiveCanvas({ snapshot, onViewportChanged, onHover }: Props) {
-  const [viewport, setViewport] = useState(new Viewport(0, 0, 100, 50));
+export default function InteractiveCanvas({
+  snapshot,
+  viewport: initialViewport,
+  onViewportChanged,
+  onHover,
+}: Props) {
+  const [viewport, setViewport] = useState(initialViewport);
 
   const containerRef = useRef<HTMLDivElement>(null);
 
