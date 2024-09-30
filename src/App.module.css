@@ -11,15 +11,3 @@
 .Title {
     display: inline-block;
 }
-
-.Blog {
-    border-radius: 4px;
-    color: whitesmoke;
-    padding: 4px;
-
-    transition: background-color 120ms;
-}
-
-.Blog:hover {
-    background-color: #4f535c;
-}
