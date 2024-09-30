@@ -30,7 +30,7 @@ export default function GameOfLife() {
       return;
     }
     setHoverPoint({ x, y });
-  }, [setHoverPoint]);
+  }, [hoverPoint, setHoverPoint]);
 
   const onClick = useCallback((viewportX: number, viewportY: number) => {
     const x = Math.floor(viewportX);
