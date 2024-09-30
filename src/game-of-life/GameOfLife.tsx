@@ -4,7 +4,7 @@ import Snapshot from '../canvas/Snapshot';
 import Viewport from '../canvas/Viewport';
 
 export default function GameOfLife() {
-  const [snapshot, setSnapshot] = useState(new Snapshot(new Array(500).fill(new Array(500).fill(0xffff13ff))));
+  const [snapshot, setSnapshot] = useState(new Snapshot(new Array(500).fill(new Array(500).fill(0x101213ff))));
 
   const onViewportChanged = useCallback((viewport: Viewport, clientWidth: number, clientHeight: number) => {
     const data = new Array(clientHeight).fill(0).map(() => new Array(clientWidth));

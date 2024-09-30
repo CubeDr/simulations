@@ -18,9 +18,11 @@ export default function InteractiveCanvas({ snapshot, onViewportChanged }: Props
   const dragPrevYRef = useRef(0);
 
   const onCanvasResize = useCallback((width: number, height: number, originalWidth?: number, originalHeight?: number) => {
-    if (originalWidth == null || originalHeight == null) return;
-
-    setViewport(viewport => viewport.resize(viewport.width * width / originalWidth, viewport.height * height / originalHeight));
+    if (originalWidth == null || originalHeight == null) {
+      setViewport(viewport => viewport.copy());
+    } else {
+      setViewport(viewport => viewport.resize(viewport.width * width / originalWidth, viewport.height * height / originalHeight));
+    }
   }, []);
 
   useEffect(() => {

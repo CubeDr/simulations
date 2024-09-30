@@ -28,4 +28,13 @@ export default class Viewport {
       height,
     );
   }
+
+  copy() {
+    return new Viewport(
+      this.offsetX,
+      this.offsetY,
+      this.width,
+      this.height,
+    );
+  }
 }
