@@ -66,7 +66,7 @@ export default function InteractionDetector({ children, onClick, onRightClick, o
     } else {
       onHover(x(e.clientX), y(e.clientY));
     }
-  }, [drag]);
+  }, [drag, onHover]);
 
   useEffect(() => {
     function onTouchMove(e: TouchEvent) {
