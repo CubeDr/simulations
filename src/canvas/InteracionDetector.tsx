@@ -6,11 +6,12 @@ interface Props {
   onClick: (x: number, y: number) => void;
   onRightClick: (x: number, y: number) => void;
   onHover: (x: number, y: number) => void;
+  onDrag: (x: number, y: number) => void;
   onMove: (dx: number, dy: number) => void;
   onZoom: (x: number, y: number, factor: number) => void;
 }
 
-export default function InteractionDetector({ children, onClick, onRightClick, onHover, onMove, onZoom }: PropsWithChildren<Props>) {
+export default function InteractionDetector({ children, onClick, onRightClick, onHover, onDrag, onMove, onZoom }: PropsWithChildren<Props>) {
   const containerRef = useRef<HTMLDivElement>(null);
 
   const isLeftDownRef = useRef(false);
@@ -92,19 +93,21 @@ export default function InteractionDetector({ children, onClick, onRightClick, o
   }, [onMove]);
 
   const onMouseMove = useCallback((e: MouseEvent) => {
-    if (isWheelDownRef.current) {
+    if (isLeftDownRef.current) {
+      onDrag(x(e.clientX), y(e.clientY));
+    } else if (isWheelDownRef.current) {
       move(e.clientX, e.clientY);
     } else {
       onHover(x(e.clientX), y(e.clientY));
     }
-  }, [move, onHover]);
+  }, [onDrag, move, onHover]);
 
   useEffect(() => {
     function onTouchMove(e: TouchEvent) {
       e.preventDefault();
 
       if (e.touches.length === 1) {
-        // Drag
+        onDrag(x(e.touches[0].clientX), y(e.touches[0].clientY));
       } else if (e.touches.length === 2) {
         const centerX = (e.touches[0].clientX + e.touches[1].clientX) / 2;
         const centerY = (e.touches[0].clientY + e.touches[1].clientY) / 2;
@@ -125,7 +128,7 @@ export default function InteractionDetector({ children, onClick, onRightClick, o
     const container = containerRef.current!;
     container.addEventListener('touchmove', onTouchMove);
     return () => container.removeEventListener('touchmove', onTouchMove);
-  }, [move, onZoom]);
+  }, [onDrag, move, onZoom]);
 
   /* ===== Zoom ===== */
   useEffect(() => {
