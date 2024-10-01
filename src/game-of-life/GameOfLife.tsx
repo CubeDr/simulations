@@ -13,8 +13,8 @@ import useIntervalTimer from './useIntervalTimer';
 const FrameButtonGradient = () => (
   <defs>
     <linearGradient id="frameButtonGradient" gradientTransform="rotate(90)">
-      <stop offset="0%" stop-color="#a7d7ef" />
-      <stop offset="100%" stop-color="#39ace7" />
+      <stop offset="0%" stopColor="#a7d7ef" />
+      <stop offset="100%" stopColor="#39ace7" />
     </linearGradient>
   </defs>
 );
