@@ -7,14 +7,25 @@ interface Props {
   onRightClick: (x: number, y: number) => void;
   onHover: (x: number, y: number) => void;
   onDrag: (x: number, y: number) => void;
+  onRightDrag: (x: number, y: number) => void;
   onMove: (dx: number, dy: number) => void;
   onZoom: (x: number, y: number, factor: number) => void;
 }
 
-export default function InteractionDetector({ children, onClick, onRightClick, onHover, onDrag, onMove, onZoom }: PropsWithChildren<Props>) {
+export default function InteractionDetector({
+  children,
+  onClick,
+  onRightClick,
+  onHover,
+  onDrag,
+  onRightDrag,
+  onMove,
+  onZoom,
+}: PropsWithChildren<Props>) {
   const containerRef = useRef<HTMLDivElement>(null);
 
   const isLeftDownRef = useRef(false);
+  const isRightDownRef = useRef(false);
   const isWheelDownRef = useRef(false);
   const isDraggingRef = useRef(false);
   const prevX = useRef(0);
@@ -27,6 +38,8 @@ export default function InteractionDetector({ children, onClick, onRightClick, o
       isLeftDownRef.current = true;
     } else if (button === 1) {
       isWheelDownRef.current = true;
+    } else if (button === 2) {
+      isRightDownRef.current = true;
     }
     prevX.current = x;
     prevY.current = y;
@@ -74,6 +87,8 @@ export default function InteractionDetector({ children, onClick, onRightClick, o
       isLeftDownRef.current = false;
     } else if (e.button === 1) {
       isWheelDownRef.current = false;
+    } else if (e.button === 2) {
+      isRightDownRef.current = false;
     }
     prevDistanceRef.current = 0;
   }, [onClick, onRightClick]);
@@ -98,10 +113,12 @@ export default function InteractionDetector({ children, onClick, onRightClick, o
       onDrag(x(e.clientX), y(e.clientY));
     } else if (isWheelDownRef.current) {
       move(e.clientX, e.clientY);
+    } else if (isRightDownRef.current) {
+      onRightDrag(x(e.clientX), y(e.clientY));
     } else {
       onHover(x(e.clientX), y(e.clientY));
     }
-  }, [onDrag, move, onHover]);
+  }, [onDrag, move, onRightDrag, onHover]);
 
   useEffect(() => {
     function onTouchMove(e: TouchEvent) {

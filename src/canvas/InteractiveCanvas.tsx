@@ -63,6 +63,7 @@ export default function InteractiveCanvas({
         onRightClick={(x, y) => onRightClick(viewportX(x), viewportY(y))}
         onHover={(x, y) => onHover(viewportX(x), viewportY(y))}
         onDrag={(x, y) => onClick(viewportX(x), viewportY(y))}
+        onRightDrag={(x, y) => onRightClick(viewportX(x), viewportY(y))}
         onMove={(dx, dy) => move(dx, dy)}
         onZoom={(x, y, factor) => {
           setViewport(viewport => viewport.zoom(factor, viewportX(x), viewportY(y)));
