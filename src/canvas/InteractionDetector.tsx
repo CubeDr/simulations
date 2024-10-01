@@ -115,9 +115,9 @@ export default function InteractionDetector({
       move(e.clientX, e.clientY);
     } else if (isRightDownRef.current) {
       onRightDrag(x(e.clientX), y(e.clientY));
-    } else {
-      onHover(x(e.clientX), y(e.clientY));
     }
+
+    onHover(x(e.clientX), y(e.clientY));
   }, [onDrag, move, onRightDrag, onHover]);
 
   useEffect(() => {
