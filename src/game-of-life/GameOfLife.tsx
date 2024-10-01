@@ -1,7 +1,8 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
-import InteractiveCanvas from '../canvas/InteractiveCanvas';
+import { useCallback, useRef, useState } from 'react';
+import InteractiveCanvas, { DragBehavior } from '../canvas/InteractiveCanvas';
 import Snapshot from '../canvas/Snapshot';
 import Viewport from '../canvas/Viewport';
+import Header from '../Header';
 import ActionControl, { Action } from './ActionControl';
 import styles from './GameOfLife.module.css';
 import Point from './Point';
@@ -9,7 +10,6 @@ import { Simulation } from './Simulation';
 import SimulationResult from './SimulationResult';
 import SpeedControl from './SpeedControl';
 import useIntervalTimer from './useIntervalTimer';
-import Header from '../Header';
 
 const FrameButtonGradient = () => (
   <defs>
@@ -127,6 +127,7 @@ export default function GameOfLife() {
       <div className={styles.GameOfLife}>
         <InteractiveCanvas
           snapshot={snapshot}
+          dragBehavior={action === Action.MOVE ? DragBehavior.MOVE : DragBehavior.CLICK}
           onViewportChanged={onViewportChanged}
           onHover={onHover}
           onClick={onClick}

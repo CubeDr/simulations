@@ -4,8 +4,14 @@ import InteractionDetector from './InteractionDetector';
 import Snapshot from './Snapshot';
 import Viewport from './Viewport';
 
+export enum DragBehavior {
+  CLICK,
+  MOVE,
+}
+
 interface Props {
   snapshot: Snapshot;
+  dragBehavior: DragBehavior;
   onViewportChanged: (viewport: Viewport, clientWidth: number, clientHeight: number) => void;
   onHover: (viewportX: number, viewportY: number) => void;
   onClick: (viewportX: number, viewportY: number) => void;
@@ -14,6 +20,7 @@ interface Props {
 
 export default function InteractiveCanvas({
   snapshot,
+  dragBehavior,
   onViewportChanged,
   onHover,
   onClick,
@@ -62,7 +69,13 @@ export default function InteractiveCanvas({
         onClick={(x, y) => onClick(viewportX(x), viewportY(y))}
         onRightClick={(x, y) => onRightClick(viewportX(x), viewportY(y))}
         onHover={(x, y) => onHover(viewportX(x), viewportY(y))}
-        onDrag={(x, y) => onClick(viewportX(x), viewportY(y))}
+        onDrag={(x, y, dx, dy) => {
+          if (dragBehavior === DragBehavior.CLICK) {
+            onClick(viewportX(x), viewportY(y));
+          } else if (dragBehavior === DragBehavior.MOVE) {
+            move(dx, dy);
+          }
+        }}
         onRightDrag={(x, y) => onRightClick(viewportX(x), viewportY(y))}
         onMove={(dx, dy) => move(dx, dy)}
         onZoom={(x, y, factor) => {

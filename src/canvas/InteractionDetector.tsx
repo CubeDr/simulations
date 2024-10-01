@@ -6,7 +6,7 @@ interface Props {
   onClick: (x: number, y: number) => void;
   onRightClick: (x: number, y: number) => void;
   onHover: (x: number, y: number) => void;
-  onDrag: (x: number, y: number) => void;
+  onDrag: (x: number, y: number, dx: number, dy: number) => void;
   onRightDrag: (x: number, y: number) => void;
   onMove: (dx: number, dy: number) => void;
   onZoom: (x: number, y: number, factor: number) => void;
@@ -94,7 +94,7 @@ export default function InteractionDetector({
   }, [onClick, onRightClick]);
 
   /* ===== Move (move & hover) ===== */
-  const move = useCallback((x: number, y: number) => {
+  const move = useCallback((x: number, y: number, callback: (dx: number, dy: number) => void) => {
     const dx = x - prevX.current;
     const dy = y - prevY.current;
     if (dx * dx + dy * dy < MOVE_DRAG_THRESHOLD * MOVE_DRAG_THRESHOLD) {
@@ -105,31 +105,31 @@ export default function InteractionDetector({
 
     prevX.current = x;
     prevY.current = y;
-    onMove(dx, dy);
-  }, [onMove]);
+    callback(dx, dy);
+  }, []);
 
   const onMouseMove = useCallback((e: MouseEvent) => {
     if (isLeftDownRef.current) {
-      onDrag(x(e.clientX), y(e.clientY));
+      move(e.clientX, e.clientY, (dx, dy) => onDrag(x(e.clientX), y(e.clientY), dx, dy));
     } else if (isWheelDownRef.current) {
-      move(e.clientX, e.clientY);
+      move(e.clientX, e.clientY, onMove);
     } else if (isRightDownRef.current) {
       onRightDrag(x(e.clientX), y(e.clientY));
     }
 
     onHover(x(e.clientX), y(e.clientY));
-  }, [onDrag, move, onRightDrag, onHover]);
+  }, [move, onDrag, onMove, onRightDrag, onHover]);
 
   useEffect(() => {
     function onTouchMove(e: TouchEvent) {
       e.preventDefault();
 
       if (e.touches.length === 1) {
-        onDrag(x(e.touches[0].clientX), y(e.touches[0].clientY));
+        move(e.touches[0].clientX, e.touches[0].clientY, (dx, dy) => onDrag(x(e.touches[0].clientX), y(e.touches[0].clientY), dx, dy));
       } else if (e.touches.length === 2) {
         const centerX = (e.touches[0].clientX + e.touches[1].clientX) / 2;
         const centerY = (e.touches[0].clientY + e.touches[1].clientY) / 2;
-        move(centerX, centerY);
+        move(centerX, centerY, onMove);
 
         const distance = Math.hypot(
           e.touches[0].clientX - e.touches[1].clientX,
@@ -146,7 +146,7 @@ export default function InteractionDetector({
     const container = containerRef.current!;
     container.addEventListener('touchmove', onTouchMove);
     return () => container.removeEventListener('touchmove', onTouchMove);
-  }, [onDrag, move, onZoom]);
+  }, [move, onDrag, onMove, onZoom]);
 
   /* ===== Zoom ===== */
   useEffect(() => {
