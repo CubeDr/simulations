@@ -1,0 +1,42 @@
+.ButtonContainer {
+  display: inline-block;
+  height: 30px;
+  margin: 4px;
+  width: 30px;
+}
+
+.Button {
+  align-items: center;
+  border-radius: 100%;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  height: 28px;
+  transition: transform 120ms;
+  width: 28px;
+}
+
+.Button:not(.Selected) {
+  background-color: #dddddd33;
+}
+
+.Button.Selected {
+  background: linear-gradient(to bottom, #a7d7efee 0%, #39ace7ee 100%);
+}
+
+.Button.Selected,
+.Button:hover {
+  transform: scale(1.2);
+}
+
+.Fill {
+  background-color: whitesmoke;
+  height: 12px;
+  width: 12px;
+}
+
+.Erase {
+  background-color: #101213ff;
+  height: 12px;
+  width: 12px;
+}

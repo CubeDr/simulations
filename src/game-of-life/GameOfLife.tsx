@@ -6,6 +6,7 @@ import styles from './GameOfLife.module.css';
 import Point from './Point';
 import { Simulation } from './Simulation';
 import SimulationResult from './SimulationResult';
+import ActionControl, { Action } from './ActionControl';
 
 const FrameButtonGradient = () => (
   <defs>
@@ -23,6 +24,8 @@ export default function GameOfLife() {
 
   const simulationRef = useRef(new Simulation());
   const [simulationResult, setSimulationResult] = useState<SimulationResult | null>(null);
+
+  const [action, setAction] = useState<Action>(Action.FILL);
 
   const [playTimer, setPlayTimer] = useState<NodeJS.Timer | null>(null);
 
@@ -70,8 +73,13 @@ export default function GameOfLife() {
     const x = Math.floor(viewportX);
     const y = Math.floor(viewportY);
 
-    setSimulationResult(simulationRef.current.add(x, y));
-  }, [playTimer]);
+    if (action === Action.FILL) {
+      setSimulationResult(simulationRef.current.add(x, y));
+    } else if (action === Action.ERASE) {
+      setSimulationResult(simulationRef.current.remove(x, y));
+    }
+
+  }, [playTimer, action]);
 
   const onRightClick = useCallback((viewportX: number, viewportY: number) => {
     // Do not mutate when simulation is playing.
@@ -115,9 +123,7 @@ export default function GameOfLife() {
         onRightClick={onRightClick} />
       <span className={styles.Frame}># {simulationResult?.frame ?? 0}</span>
       <div className={styles.Control}>
-        <div>
-
-        </div>
+        <ActionControl action={action} onActionSet={setAction} />
         <div className={styles.FrameButtonContainer}>
           <button onClick={prev} disabled={(simulationResult?.frame ?? 0) === 0 || playTimer != null} className={styles.FrameButton} title="Previous frame">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" style={{
