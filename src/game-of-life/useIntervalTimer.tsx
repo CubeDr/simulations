@@ -49,5 +49,5 @@ export default function useIntervalTimer(interval: number, callback: () => void)
     };
   }, [interval]);
 
-  return { start, pause, isRunning: intervalIdRef.current != null };
+  return { start, pause };
 }
