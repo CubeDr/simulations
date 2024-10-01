@@ -11,7 +11,7 @@ export class Simulation {
   private historyIndex = 0;
 
   constructor() {
-    this.addHistory(this.toSimulationResult(0, this.points));
+    this.clear();
   }
 
   add(x: number, y: number): SimulationResult {
@@ -81,6 +81,14 @@ export class Simulation {
   prev(): SimulationResult | null {
     if (this.historyIndex <= 1) return null;
     return this.history[--this.historyIndex - 1];
+  }
+
+  clear(): SimulationResult {
+    this.frame = 0;
+    this.points = new Map<number, Set<number>>();
+    this.history = [];
+    this.historyIndex = 0;
+    return this.addHistory(this.toSimulationResult(0, this.points));
   }
 
   private toSimulationResult(frame: number, points: Map<number, Set<number>>) {

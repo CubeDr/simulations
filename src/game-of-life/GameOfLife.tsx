@@ -2,11 +2,11 @@ import { useCallback, useRef, useState } from 'react';
 import InteractiveCanvas from '../canvas/InteractiveCanvas';
 import Snapshot from '../canvas/Snapshot';
 import Viewport from '../canvas/Viewport';
+import ActionControl, { Action } from './ActionControl';
 import styles from './GameOfLife.module.css';
 import Point from './Point';
 import { Simulation } from './Simulation';
 import SimulationResult from './SimulationResult';
-import ActionControl, { Action } from './ActionControl';
 
 const FrameButtonGradient = () => (
   <defs>
@@ -113,6 +113,14 @@ export default function GameOfLife() {
     }
   }
 
+  function clear() {
+    if (playTimer != null) {
+      clearInterval(playTimer);
+      setPlayTimer(null);
+    }
+    setSimulationResult(simulationRef.current.clear());
+  }
+
   return (
     <div className={styles.GameOfLife}>
       <InteractiveCanvas
@@ -123,7 +131,13 @@ export default function GameOfLife() {
         onRightClick={onRightClick} />
       <span className={styles.Frame}># {simulationResult?.frame ?? 0}</span>
       <div className={styles.Control}>
-        <ActionControl action={action} onActionSet={setAction} />
+        <ActionControl action={action} onActionSet={(action) => {
+          if (action === Action.CLEAR) {
+            clear();
+          } else {
+            setAction(action);
+          }
+        }} />
         <div className={styles.FrameButtonContainer}>
           <button onClick={prev} disabled={(simulationResult?.frame ?? 0) === 0 || playTimer != null} className={styles.FrameButton} title="Previous frame">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" style={{

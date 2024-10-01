@@ -1,3 +1,15 @@
+.ActionControl {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  @media (min-width: 580px) {
+    flex-direction: row;
+    gap: 14px;
+  }
+}
+
 .ButtonContainer {
   display: inline-block;
   height: 30px;
@@ -39,4 +51,21 @@
   background-color: #101213ff;
   height: 12px;
   width: 12px;
+}
+
+.ClearButton {
+  background: linear-gradient(to bottom, #a7d7efee 0%, #39ace7ee 100%);
+  box-sizing: border-box;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  margin-left: -4px;
+  padding: 8px 4px;
+  text-align: center;
+  transition: transform 120ms;
+  width: 80px;
+}
+
+.ClearButton:hover {
+  transform: scale(1.1);
 }
