@@ -1,13 +1,3 @@
 .App {
     padding: 18px;
 }
-
-.Header {
-    align-items: baseline;
-    display: flex;
-    justify-content: space-between;
-}
-
-.Title {
-    display: inline-block;
-}
