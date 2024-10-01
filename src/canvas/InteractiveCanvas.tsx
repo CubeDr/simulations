@@ -47,6 +47,31 @@ export default function InteractiveCanvas({
     onViewportChanged(viewport, containerRef.current!.offsetWidth, containerRef.current!.offsetHeight);
   }, [viewport, onViewportChanged]);
 
+  useEffect(() => {
+    function onWheel(e: WheelEvent) {
+      e.preventDefault();
+      e.stopPropagation();
+
+      const { top, left, width, height } = containerRef.current!.getBoundingClientRect();
+      const pointerX = e.clientX - left;
+      const pointerY = e.clientY - top;
+
+      const viewportX = viewport.offsetX + pointerX / width * viewport.width;
+      const viewportY = viewport.offsetY + pointerY / height * viewport.height;
+
+      const isZoomIn = e.deltaY < 0;
+      if (isZoomIn) {
+        setViewport(viewport => viewport.zoomIn(viewportX, viewportY));
+      } else {
+        setViewport(viewport => viewport.zoomOut(viewportX, viewportY));
+      }
+    }
+
+    const container = containerRef.current!;
+    container.addEventListener('wheel', onWheel);
+    return () => container.removeEventListener('wheel', onWheel);
+  }, [viewport]);
+
   function onPointerDown(e: MouseEvent) {
     if (e.button !== 0) return;
 
