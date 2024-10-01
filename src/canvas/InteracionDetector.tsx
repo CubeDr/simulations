@@ -4,7 +4,7 @@ interface Props {
   onClick: (x: number, y: number) => void;
   onRightClick: (x: number, y: number) => void;
   onHover: (x: number, y: number) => void;
-  onDrag: (dx: number, y: number) => void;
+  onDrag: (dx: number, dy: number) => void;
   onZoom: (x: number, y: number, factor: number) => void;
 }
 
@@ -37,6 +37,11 @@ export default function InteractionDetector({ children, onClick, onRightClick, o
         e.touches[0].clientY - e.touches[1].clientY
       );
       prevDistanceRef.current = distance;
+
+      const centerX = (e.touches[0].clientX + e.touches[1].clientX) / 2;
+      const centerY = (e.touches[0].clientY + e.touches[1].clientY) / 2;
+      prevX.current = centerX;
+      prevY.current = centerY;
     }
   }, [down]);
 
@@ -54,7 +59,7 @@ export default function InteractionDetector({ children, onClick, onRightClick, o
     }
     isDraggingRef.current = false;
     isDownRef.current = false;
-    prevDistanceRef.current = 0;
+    prevDistanceRef.current = 0; 
   }, [onClick, onRightClick]);
 
   /* ===== Move (drag & hover) ===== */
@@ -85,6 +90,10 @@ export default function InteractionDetector({ children, onClick, onRightClick, o
       if (e.touches.length === 1) {
         drag(e.touches[0].clientX, e.touches[0].clientY);
       } else if (e.touches.length === 2) {
+        const centerX = (e.touches[0].clientX + e.touches[1].clientX) / 2;
+        const centerY = (e.touches[0].clientY + e.touches[1].clientY) / 2;
+        drag(centerX, centerY); 
+
         const distance = Math.hypot(
           e.touches[0].clientX - e.touches[1].clientX,
           e.touches[0].clientY - e.touches[1].clientY
@@ -92,9 +101,6 @@ export default function InteractionDetector({ children, onClick, onRightClick, o
 
         const zoomFactor = distance / prevDistanceRef.current;
         prevDistanceRef.current = distance;
-
-        const centerX = (e.touches[0].clientX + e.touches[1].clientX) / 2;
-        const centerY = (e.touches[0].clientY + e.touches[1].clientY) / 2;
 
         onZoom(x(centerX), y(centerY), zoomFactor);
       }
