@@ -10,7 +10,7 @@
 
 .Control {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1fr minmax(180px, 1fr) 1fr;
   margin-top: 14px;
 }
 
