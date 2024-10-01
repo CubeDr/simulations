@@ -9,11 +9,16 @@
 }
 
 .Control {
-  text-align: center;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
   margin-top: 14px;
 }
 
-.Button {
+.FrameButtonContainer {
+  text-align: center;
+}
+
+.FrameButton {
   background: none;
   border: none;
   color: #39ace7;
@@ -23,14 +28,14 @@
   height: 60px;
 }
 
-.Button:not(:disabled) {
+.FrameButton:not(:disabled) {
   cursor: pointer;
 }
 
-.Button:hover:not(:disabled) {
+.FrameButton:hover:not(:disabled) {
   transform: scale(1.08);
 }
 
-.Button:disabled {
+.FrameButton:disabled {
   color: #909090;
 }
