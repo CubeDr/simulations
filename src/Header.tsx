@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import styles from './Header.module.css';
 
 interface Props {
@@ -5,6 +6,12 @@ interface Props {
 }
 
 export default function Header({ title }: Props) {
+  useEffect(() => {
+    if (title != null) {
+      document.title = title + ' - Online simulations';
+    }
+  }, [title]);
+
   return (
     <header className={styles.Header}>
       <h1>
