@@ -70,6 +70,7 @@ export default function InteractionDetector({ children, onClick, onRightClick, o
 
   useEffect(() => {
     function onTouchMove(e: TouchEvent) {
+      e.preventDefault();
       drag(e.touches[0].clientX, e.touches[0].clientY);
     }
 
