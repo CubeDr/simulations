@@ -86,7 +86,7 @@ export default function GameOfLife() {
 
   const onRightClick = useCallback((viewportX: number, viewportY: number) => {
     // Do not mutate when simulation is playing.
-    if (timer.isRunning != null) return;
+    if (timer.isRunning) return;
 
     const x = Math.floor(viewportX);
     const y = Math.floor(viewportY);
