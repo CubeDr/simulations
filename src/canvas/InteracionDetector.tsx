@@ -1,5 +1,7 @@
 import React, { MouseEvent, PropsWithChildren, useCallback, useEffect, useRef } from 'react';
 
+const DRAG_THRESHOLD = 5;
+
 interface Props {
   onClick: (x: number, y: number) => void;
   onRightClick: (x: number, y: number) => void;
@@ -59,17 +61,19 @@ export default function InteractionDetector({ children, onClick, onRightClick, o
     }
     isDraggingRef.current = false;
     isDownRef.current = false;
-    prevDistanceRef.current = 0; 
+    prevDistanceRef.current = 0;
   }, [onClick, onRightClick]);
 
   /* ===== Move (drag & hover) ===== */
   const drag = useCallback((x: number, y: number) => {
-    if (x === prevX.current && y === prevY.current) return;
+    const dx = x - prevX.current;
+    const dy = y - prevY.current;
+    if (dx * dx + dy * dy < DRAG_THRESHOLD * DRAG_THRESHOLD) {
+      return;
+    }
 
     isDraggingRef.current = true;
 
-    const dx = x - prevX.current;
-    const dy = y - prevY.current;
     prevX.current = x;
     prevY.current = y;
     onDrag(dx, dy);
@@ -92,7 +96,7 @@ export default function InteractionDetector({ children, onClick, onRightClick, o
       } else if (e.touches.length === 2) {
         const centerX = (e.touches[0].clientX + e.touches[1].clientX) / 2;
         const centerY = (e.touches[0].clientY + e.touches[1].clientY) / 2;
-        drag(centerX, centerY); 
+        drag(centerX, centerY);
 
         const distance = Math.hypot(
           e.touches[0].clientX - e.touches[1].clientX,
