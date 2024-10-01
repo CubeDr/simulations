@@ -32,23 +32,28 @@ export default class Viewport {
       height,
     );
   }
-
-  zoomIn(x: number, y: number): Viewport {
-    return new Viewport(
-      lerp(this.offsetX, x, 1 / 3),
-      lerp(this.offsetY, y, 1 / 3),
-      this.width * 2 / 3,
-      this.height * 2 / 3,
-    );
-  }
-
-  zoomOut(x: number, y: number): Viewport {
-    return new Viewport(
-      lerp(this.offsetX, x, -1 / 2),
-      lerp(this.offsetY, y, -1 / 2),
-      this.width * 3 / 2,
-      this.height * 3 / 2,
-    );
+  
+  zoom(factor: number, x: number, y: number): Viewport {
+    if (factor > 1) {
+      // Zoom In
+      return new Viewport(
+        lerp(this.offsetX, x, 1 - 1 / factor),
+        lerp(this.offsetY, y, 1 - 1 / factor),
+        this.width / factor,
+        this.height / factor
+      );
+    } else if (factor < 1) {
+      // Zoom Out
+      return new Viewport(
+        lerp(this.offsetX, x, factor - 1),
+        lerp(this.offsetY, y, factor - 1),
+        this.width * (1 / factor),
+        this.height * (1 / factor)
+      );
+    } else {
+      // No change (factor === 1)
+      return this;
+    }
   }
 
   copy() {

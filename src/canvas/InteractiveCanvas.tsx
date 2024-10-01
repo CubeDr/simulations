@@ -61,9 +61,9 @@ export default function InteractiveCanvas({
 
       const isZoomIn = e.deltaY < 0;
       if (isZoomIn) {
-        setViewport(viewport => viewport.zoomIn(viewportX, viewportY));
+        setViewport(viewport => viewport.zoom(3 / 2, viewportX, viewportY));
       } else {
-        setViewport(viewport => viewport.zoomOut(viewportX, viewportY));
+        setViewport(viewport => viewport.zoom(2 / 3, viewportX, viewportY));
       }
     }
 
