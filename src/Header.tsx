@@ -18,7 +18,10 @@ export default function Header({ title }: Props) {
         <a href="/">Simulations</a>
         {title && <>&nbsp;- {title}</>}
       </h1>
-      <a href="https://www.hyuni.dev">Blog</a>
+      <div>
+        <a className={styles.Link} href="https://www.hyuni.dev">Blog</a>
+        <a className={styles.Link} href="https://github.com/CubeDr/simulations">Github</a>
+      </div>
     </header>
   );
 }
