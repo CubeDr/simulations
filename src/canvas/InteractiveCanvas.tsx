@@ -43,7 +43,7 @@ export default function InteractiveCanvas({
     onViewportChanged(viewport, containerRef.current!.offsetWidth, containerRef.current!.offsetHeight);
   }, [viewport, onViewportChanged]);
 
-  function drag(dx: number, dy: number) {
+  function move(dx: number, dy: number) {
     setViewport(viewport => {
       const viewportDx = -dx * viewport.width / containerRef.current!.offsetWidth;
       const viewportDy = -dy * viewport.height / containerRef.current!.offsetHeight;
@@ -62,7 +62,7 @@ export default function InteractiveCanvas({
         onClick={(x, y) => onClick(viewportX(x), viewportY(y))}
         onRightClick={(x, y) => onRightClick(viewportX(x), viewportY(y))}
         onHover={(x, y) => onHover(viewportX(x), viewportY(y))}
-        onDrag={(dx, dy) => drag(dx, dy)}
+        onMove={(dx, dy) => move(dx, dy)}
         onZoom={(x, y, factor) => {
           setViewport(viewport => viewport.zoom(factor, viewportX(x), viewportY(y)));
         }}>
