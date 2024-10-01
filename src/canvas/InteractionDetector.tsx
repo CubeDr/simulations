@@ -33,6 +33,7 @@ export default function InteractionDetector({ children, onClick, onRightClick, o
   }, []);
 
   const onMouseDown = useCallback((e: MouseEvent) => {
+    e.preventDefault();
     down(e.clientX, e.clientY, e.button);
   }, [down]);
 
