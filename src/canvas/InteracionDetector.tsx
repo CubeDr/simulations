@@ -15,6 +15,7 @@ export default function InteractionDetector({ children, onClick, onRightClick, o
   const isDraggingRef = useRef(false);
   const prevX = useRef(0);
   const prevY = useRef(0);
+  const prevDistanceRef = useRef(0);
 
   /* ==== Down ===== */
   const down = useCallback((x: number, y: number) => {
@@ -28,7 +29,15 @@ export default function InteractionDetector({ children, onClick, onRightClick, o
   }, [down]);
 
   const onTouchDown = useCallback((e: React.TouchEvent) => {
-    down(e.touches[0].clientX, e.touches[0].clientY);
+    if (e.touches.length === 1) {
+      down(e.touches[0].clientX, e.touches[0].clientY);
+    } else if (e.touches.length === 2) {
+      const distance = Math.hypot(
+        e.touches[0].clientX - e.touches[1].clientX,
+        e.touches[0].clientY - e.touches[1].clientY
+      );
+      prevDistanceRef.current = distance;
+    }
   }, [down]);
 
   /* ===== Up ===== */
@@ -45,6 +54,7 @@ export default function InteractionDetector({ children, onClick, onRightClick, o
     }
     isDraggingRef.current = false;
     isDownRef.current = false;
+    prevDistanceRef.current = 0;
   }, [onClick, onRightClick]);
 
   /* ===== Move (drag & hover) ===== */
@@ -71,20 +81,36 @@ export default function InteractionDetector({ children, onClick, onRightClick, o
   useEffect(() => {
     function onTouchMove(e: TouchEvent) {
       e.preventDefault();
-      drag(e.touches[0].clientX, e.touches[0].clientY);
+
+      if (e.touches.length === 1) {
+        drag(e.touches[0].clientX, e.touches[0].clientY);
+      } else if (e.touches.length === 2) {
+        const distance = Math.hypot(
+          e.touches[0].clientX - e.touches[1].clientX,
+          e.touches[0].clientY - e.touches[1].clientY
+        );
+
+        const zoomFactor = distance / prevDistanceRef.current;
+        prevDistanceRef.current = distance;
+
+        const centerX = (e.touches[0].clientX + e.touches[1].clientX) / 2;
+        const centerY = (e.touches[0].clientY + e.touches[1].clientY) / 2;
+
+        onZoom(x(centerX), y(centerY), zoomFactor);
+      }
     }
 
     const container = containerRef.current!;
     container.addEventListener('touchmove', onTouchMove);
     return () => container.removeEventListener('touchmove', onTouchMove);
-  }, [drag]);
+  }, [drag, onZoom]);
 
   /* ===== Zoom ===== */
   useEffect(() => {
     function onWheel(e: WheelEvent) {
       e.preventDefault();
       e.stopPropagation();
-      
+
       onZoom(x(e.clientX), y(e.clientY), e.deltaY > 0 ? 2 / 3 : 3 / 2);
     }
 
