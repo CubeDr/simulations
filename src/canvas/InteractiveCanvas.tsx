@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import Canvas from './Canvas';
-import InteractionDetector from './InteracionDetector';
+import InteractionDetector from './InteractionDetector';
 import Snapshot from './Snapshot';
 import Viewport from './Viewport';
 
