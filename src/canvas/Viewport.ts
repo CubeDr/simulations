@@ -1,5 +1,5 @@
-function lerp(from: number, to: number, ratio: number): number {
-  return from + ratio * (to - from);
+function translate(from: number, to: number, ratio: number): number {
+  return to + ratio * (from - to);
 }
 
 export default class Viewport {
@@ -32,28 +32,14 @@ export default class Viewport {
       height,
     );
   }
-  
+
   zoom(factor: number, x: number, y: number): Viewport {
-    if (factor > 1) {
-      // Zoom In
-      return new Viewport(
-        lerp(this.offsetX, x, 1 - 1 / factor),
-        lerp(this.offsetY, y, 1 - 1 / factor),
-        this.width / factor,
-        this.height / factor
-      );
-    } else if (factor < 1) {
-      // Zoom Out
-      return new Viewport(
-        lerp(this.offsetX, x, factor - 1),
-        lerp(this.offsetY, y, factor - 1),
-        this.width * (1 / factor),
-        this.height * (1 / factor)
-      );
-    } else {
-      // No change (factor === 1)
-      return this;
-    }
+    return new Viewport(
+      translate(this.offsetX, x, 1 / factor),
+      translate(this.offsetY, y, 1 / factor),
+      this.width / factor,
+      this.height / factor
+    );
   }
 
   copy() {
