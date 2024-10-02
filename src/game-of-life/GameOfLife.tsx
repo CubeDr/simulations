@@ -1,4 +1,5 @@
 import { useCallback, useRef, useState } from 'react';
+import { RenderEvent } from '../canvas/Canvas';
 import InteractiveCanvas, { DragBehavior } from '../canvas/InteractiveCanvas';
 import Snapshot from '../canvas/Snapshot';
 import Viewport from '../canvas/Viewport';
@@ -10,7 +11,6 @@ import { Simulation } from './Simulation';
 import SimulationResult from './SimulationResult';
 import SpeedControl from './SpeedControl';
 import useIntervalTimer from './useIntervalTimer';
-import { RenderEvent } from '../canvas/Canvas';
 
 const FrameButtonGradient = () => (
   <defs>
@@ -32,7 +32,7 @@ export default function GameOfLife() {
   const [action, setAction] = useState<Action>(Action.FILL);
 
   const [speed, setSpeed] = useState(300);
-  const timer = useIntervalTimer(speed, () => next());
+  const { start, pause } = useIntervalTimer(speed, () => next());
   const [isRunning, setIsRunning] = useState(false);
 
   const renderingStartTimeRef = useRef(0);
@@ -107,6 +107,19 @@ export default function GameOfLife() {
     }
   }, [setLastRenderingTime]);
 
+  const clear = useCallback(() => {
+    pause();
+    setSimulationResult(simulationRef.current.clear());
+  }, [pause, setSimulationResult]);
+
+  const onActionSet = useCallback((action: Action) => {
+    if (action === Action.CLEAR) {
+      clear();
+    } else {
+      setAction(action);
+    }
+  }, [clear, setAction]);
+
   function prev() {
     const snapshot = simulationRef.current.prev();
     if (snapshot != null) {
@@ -120,16 +133,12 @@ export default function GameOfLife() {
 
   function play() {
     if (isRunning) {
-      timer.pause();
+      pause();
     } else {
-      timer.start();
+      start();
+      setAction(Action.MOVE);
     }
     setIsRunning(!isRunning);
-  }
-
-  function clear() {
-    timer.pause();
-    setSimulationResult(simulationRef.current.clear());
   }
 
   return (
@@ -154,13 +163,7 @@ export default function GameOfLife() {
             Rendering: {lastRenderingTime}ms
           </span></div>
         <div className={styles.Control}>
-          <ActionControl action={action} onActionSet={(action) => {
-            if (action === Action.CLEAR) {
-              clear();
-            } else {
-              setAction(action);
-            }
-          }} />
+          <ActionControl action={action} onActionSet={onActionSet} />
           <div className={styles.FrameButtonContainer}>
             <button onClick={prev} disabled={(simulationResult?.frame ?? 0) === 0 || isRunning} className={styles.FrameButton} title="Previous frame">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" style={{
