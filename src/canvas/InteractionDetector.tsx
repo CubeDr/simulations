@@ -1,4 +1,4 @@
-import React, { MouseEvent, PropsWithChildren, useCallback, useEffect, useRef } from 'react';
+import React, { MouseEvent, PointerEvent, PropsWithChildren, useCallback, useEffect, useRef } from 'react';
 
 const MOVE_DRAG_THRESHOLD = 5;
 const ZOOM_FACTOR = 3 / 2;
@@ -113,7 +113,10 @@ export default function InteractionDetector({
     callback(dx, dy);
   }, []);
 
-  const onMouseMove = useCallback((e: MouseEvent) => {
+  const onPointerMove = useCallback((e: PointerEvent) => {
+    // Touch is handled in onTouchMove below.
+    if (e.pointerType === 'touch') return;
+
     if (isLeftDownRef.current) {
       move(e.clientX, e.clientY, (dx, dy) => onDrag(x(e.clientX), y(e.clientY), dx, dy));
       onHover(x(e.clientX), y(e.clientY));
@@ -140,17 +143,21 @@ export default function InteractionDetector({
       } else if (e.touches.length === 2) {
         const centerX = (e.touches[0].clientX + e.touches[1].clientX) / 2;
         const centerY = (e.touches[0].clientY + e.touches[1].clientY) / 2;
-        move(centerX, centerY, onMove);
+        if (prevTouchCountRef.current !== 2) {
+          down(centerX, centerY);
+        } else if (prevTouchCountRef.current === 2) {
+          move(centerX, centerY, onMove);
 
-        const distance = Math.hypot(
-          e.touches[0].clientX - e.touches[1].clientX,
-          e.touches[0].clientY - e.touches[1].clientY
-        );
+          const distance = Math.hypot(
+            e.touches[0].clientX - e.touches[1].clientX,
+            e.touches[0].clientY - e.touches[1].clientY
+          );
 
-        const zoomFactor = distance / prevDistanceRef.current;
-        prevDistanceRef.current = distance;
+          const zoomFactor = distance / prevDistanceRef.current;
+          prevDistanceRef.current = distance;
 
-        onZoom(x(centerX), y(centerY), zoomFactor);
+          onZoom(x(centerX), y(centerY), zoomFactor);
+        }
       }
 
       prevTouchCountRef.current = e.touches.length;
@@ -192,7 +199,7 @@ export default function InteractionDetector({
       onTouchStart={onTouchDown}
       onTouchEnd={onNoHover}
       onMouseUp={onMouseUp}
-      onPointerMove={onMouseMove}
+      onPointerMove={onPointerMove}
       onContextMenu={e => e.preventDefault()}>
       {children}
     </div>
