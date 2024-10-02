@@ -22,7 +22,7 @@ const FrameButtonGradient = () => (
 );
 
 export default function GameOfLife() {
-  const [snapshot, setSnapshot] = useState(new Snapshot(new Array(500).fill(new Array(500).fill(0x101213ff))));
+  const [snapshot, setSnapshot] = useState(new Snapshot(0, 0, new Array(500).fill(new Array(500).fill(0x101213ff))));
 
   const [hoverPoint, setHoverPoint] = useState<Point | null>(null);
 
@@ -64,7 +64,7 @@ export default function GameOfLife() {
       }
     }
 
-    setSnapshot(new Snapshot(data));
+    setSnapshot(new Snapshot(viewport.offsetX - Math.floor(viewport.offsetX), viewport.offsetY - Math.floor(viewport.offsetY), data));
   }, [hoverPoint, setSnapshot, simulationResult]);
 
   const onHover = useCallback((viewportX: number, viewportY: number) => {
