@@ -32,6 +32,8 @@ export default function InteractionDetector({
   const prevY = useRef(0);
   const prevDistanceRef = useRef(0);
 
+  const prevTouchCountRef = useRef(0);
+
   /* ==== Down ===== */
   const down = useCallback((x: number, y: number, button: number = 0) => {
     if (button === 0) {
@@ -125,7 +127,11 @@ export default function InteractionDetector({
       e.preventDefault();
 
       if (e.touches.length === 1) {
-        move(e.touches[0].clientX, e.touches[0].clientY, (dx, dy) => onDrag(x(e.touches[0].clientX), y(e.touches[0].clientY), dx, dy));
+        if (prevTouchCountRef.current === 1) {
+          move(e.touches[0].clientX, e.touches[0].clientY, (dx, dy) => onDrag(x(e.touches[0].clientX), y(e.touches[0].clientY), dx, dy));
+        } else {
+          down(e.touches[0].clientX, e.touches[0].clientY);
+        }
       } else if (e.touches.length === 2) {
         const centerX = (e.touches[0].clientX + e.touches[1].clientX) / 2;
         const centerY = (e.touches[0].clientY + e.touches[1].clientY) / 2;
@@ -141,12 +147,14 @@ export default function InteractionDetector({
 
         onZoom(x(centerX), y(centerY), zoomFactor);
       }
+
+      prevTouchCountRef.current = e.touches.length;
     }
 
     const container = containerRef.current!;
     container.addEventListener('touchmove', onTouchMove);
     return () => container.removeEventListener('touchmove', onTouchMove);
-  }, [move, onDrag, onMove, onZoom]);
+  }, [move, onDrag, down, onMove, onZoom]);
 
   /* ===== Zoom ===== */
   useEffect(() => {
