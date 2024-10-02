@@ -21,7 +21,7 @@ function App() {
       <iframe
         src="https://github.com/sponsors/CubeDr/card"
         title="Sponsor CubeDr"
-        height="100"
+        height="225"
         width="100%"
         style={{ border: 0, marginTop: '24px' }} />
     </HashRouter>
