@@ -115,13 +115,15 @@ export default function InteractionDetector({
   const onMouseMove = useCallback((e: MouseEvent) => {
     if (isLeftDownRef.current) {
       move(e.clientX, e.clientY, (dx, dy) => onDrag(x(e.clientX), y(e.clientY), dx, dy));
+      onHover(x(e.clientX), y(e.clientY));
     } else if (isWheelDownRef.current) {
       move(e.clientX, e.clientY, onMove);
     } else if (isRightDownRef.current) {
       onRightDrag(x(e.clientX), y(e.clientY));
+      onHover(x(e.clientX), y(e.clientY));
+    } else {
+      onHover(x(e.clientX), y(e.clientY));
     }
-
-    onHover(x(e.clientX), y(e.clientY));
   }, [move, onDrag, onMove, onRightDrag, onHover]);
 
   useEffect(() => {
