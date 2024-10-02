@@ -7,6 +7,10 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  font-family: "Kay Pho Du", serif;
+  font-weight: 500;
+  font-style: normal;
 }
 
 code {
