@@ -14,6 +14,7 @@ interface Props {
   dragBehavior: DragBehavior;
   onViewportChanged: (viewport: Viewport, clientWidth: number, clientHeight: number) => void;
   onHover: (viewportX: number, viewportY: number) => void;
+  onNoHover: () => void;
   onClick: (viewportX: number, viewportY: number) => void;
   onRightClick: (viewportX: number, viewportY: number) => void;
   onRenderEvent: (event: RenderEvent) => void;
@@ -24,6 +25,7 @@ export default function InteractiveCanvas({
   dragBehavior,
   onViewportChanged,
   onHover,
+  onNoHover,
   onClick,
   onRightClick,
   onRenderEvent,
@@ -71,6 +73,7 @@ export default function InteractiveCanvas({
         onClick={(x, y) => onClick(viewportX(x), viewportY(y))}
         onRightClick={(x, y) => onRightClick(viewportX(x), viewportY(y))}
         onHover={(x, y) => onHover(viewportX(x), viewportY(y))}
+        onNoHover={() => onNoHover()}
         onDrag={(x, y, dx, dy) => {
           if (dragBehavior === DragBehavior.CLICK) {
             onClick(viewportX(x), viewportY(y));

@@ -141,6 +141,7 @@ export default function GameOfLife() {
           dragBehavior={action === Action.MOVE ? DragBehavior.MOVE : DragBehavior.CLICK}
           onViewportChanged={onViewportChanged}
           onHover={onHover}
+          onNoHover={() => setHoverPoint(null)}
           onClick={onClick}
           onRightClick={onRightClick}
           onRenderEvent={onRenderEvent} />

@@ -6,6 +6,7 @@ interface Props {
   onClick: (x: number, y: number) => void;
   onRightClick: (x: number, y: number) => void;
   onHover: (x: number, y: number) => void;
+  onNoHover: () => void;
   onDrag: (x: number, y: number, dx: number, dy: number) => void;
   onRightDrag: (x: number, y: number) => void;
   onMove: (dx: number, dy: number) => void;
@@ -17,6 +18,7 @@ export default function InteractionDetector({
   onClick,
   onRightClick,
   onHover,
+  onNoHover,
   onDrag,
   onRightDrag,
   onMove,
@@ -185,8 +187,10 @@ export default function InteractionDetector({
     <div ref={containerRef}
       onMouseDown={onMouseDown}
       onTouchStart={onTouchDown}
+      onTouchEnd={onNoHover}
+      onPointerOut={() => console.log('out')}
       onMouseUp={onMouseUp}
-      onMouseMove={onMouseMove}
+      onPointerMove={onMouseMove}
       onContextMenu={e => e.preventDefault()}>
       {children}
     </div>
