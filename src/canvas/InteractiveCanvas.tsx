@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import Canvas from './Canvas';
+import Canvas, { RenderEvent } from './Canvas';
 import InteractionDetector from './InteractionDetector';
 import Snapshot from './Snapshot';
 import Viewport from './Viewport';
@@ -16,6 +16,7 @@ interface Props {
   onHover: (viewportX: number, viewportY: number) => void;
   onClick: (viewportX: number, viewportY: number) => void;
   onRightClick: (viewportX: number, viewportY: number) => void;
+  onRenderEvent: (event: RenderEvent) => void;
 }
 
 export default function InteractiveCanvas({
@@ -25,6 +26,7 @@ export default function InteractiveCanvas({
   onHover,
   onClick,
   onRightClick,
+  onRenderEvent,
 }: Props) {
   const [viewport, setViewport] = useState(new Viewport(0, 0, 100, 100 / document.documentElement.clientWidth * document.documentElement.clientHeight * 0.7));
 
@@ -81,7 +83,7 @@ export default function InteractiveCanvas({
         onZoom={(x, y, factor) => {
           setViewport(viewport => viewport.zoom(factor, viewportX(x), viewportY(y)));
         }}>
-        <Canvas snapshot={snapshot} onResize={onCanvasResize} />
+        <Canvas snapshot={snapshot} onResize={onCanvasResize} onRenderEvent={onRenderEvent} />
       </InteractionDetector>
     </div>
   );

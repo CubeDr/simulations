@@ -1,12 +1,18 @@
 import { useCallback, useEffect, useRef } from 'react';
 import Snapshot from './Snapshot';
 
+export enum RenderEvent {
+  START,
+  FINISH,
+}
+
 interface Props {
   snapshot: Snapshot;
   onResize: (width: number, height: number, originalWidth?: number, originalHeight?: number) => void;
+  onRenderEvent: (event: RenderEvent) => void;
 }
 
-export default function Canvas({ snapshot, onResize }: Props) {
+export default function Canvas({ snapshot, onResize, onRenderEvent }: Props) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const contextRef = useRef<CanvasRenderingContext2D>();
   const imageDataRef = useRef<ImageData>();
@@ -38,6 +44,8 @@ export default function Canvas({ snapshot, onResize }: Props) {
   }, [onResize]);
 
   const render = useCallback(() => {
+    onRenderEvent(RenderEvent.START);
+
     const width = canvasRef.current!.width;
     const height = canvasRef.current!.height;
 
@@ -68,7 +76,9 @@ export default function Canvas({ snapshot, onResize }: Props) {
     }
 
     contextRef.current!.putImageData(imageDataRef.current, 0, 0);
-  }, [snapshot]);
+
+    onRenderEvent(RenderEvent.FINISH);
+  }, [snapshot, onRenderEvent]);
 
   useEffect(() => {
     window.addEventListener('resize', onWindowResize);

@@ -21,7 +21,7 @@ export class Simulation {
     this.history = [];
     this.historyIndex = 0;
     this.frame = 0;
-    return this.addHistory(this.toSimulationResult(this.frame, this.points));
+    return this.addHistory(this.toSimulationResult(this.frame, this.points, 0));
   }
 
   remove(x: number, y: number): SimulationResult {
@@ -31,7 +31,7 @@ export class Simulation {
       this.history = [];
       this.historyIndex = 0;
       this.frame = 0;
-      return this.addHistory(this.toSimulationResult(this.frame, this.points));
+      return this.addHistory(this.toSimulationResult(this.frame, this.points, 0));
     }
 
     return this.history[this.historyIndex - 1];
@@ -45,6 +45,7 @@ export class Simulation {
     if (this.historyIndex < this.history.length) {
       return this.history[this.historyIndex++];
     }
+    const startTime = new Date().getTime();
 
     const nextCounts = new Map<number, Map<number, number>>();
 
@@ -75,7 +76,8 @@ export class Simulation {
     });
     this.points = nextPoints;
 
-    return this.addHistory(this.toSimulationResult(++this.frame, nextPoints));
+    const simulationTime = new Date().getTime() - startTime;
+    return this.addHistory(this.toSimulationResult(++this.frame, nextPoints, simulationTime));
   }
 
   prev(): SimulationResult | null {
@@ -88,14 +90,15 @@ export class Simulation {
     this.points = new Map<number, Set<number>>();
     this.history = [];
     this.historyIndex = 0;
-    return this.addHistory(this.toSimulationResult(0, this.points));
+    return this.addHistory(this.toSimulationResult(0, this.points, 0));
   }
 
-  private toSimulationResult(frame: number, points: Map<number, Set<number>>) {
+  private toSimulationResult(frame: number, points: Map<number, Set<number>>, simulationTime: number) {
     return {
       frame,
       points,
       has: (x: number, y: number) => points.get(y)?.has(x) ?? false,
+      simulationTime,
     };
   }
 

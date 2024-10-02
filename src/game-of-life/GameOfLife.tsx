@@ -10,6 +10,7 @@ import { Simulation } from './Simulation';
 import SimulationResult from './SimulationResult';
 import SpeedControl from './SpeedControl';
 import useIntervalTimer from './useIntervalTimer';
+import { RenderEvent } from '../canvas/Canvas';
 
 const FrameButtonGradient = () => (
   <defs>
@@ -33,6 +34,9 @@ export default function GameOfLife() {
   const [speed, setSpeed] = useState(300);
   const timer = useIntervalTimer(speed, () => next());
   const [isRunning, setIsRunning] = useState(false);
+
+  const renderingStartTimeRef = useRef(0);
+  const [lastRenderingTime, setLastRenderingTime] = useState(0);
 
   const onViewportChanged = useCallback((viewport: Viewport, clientWidth: number, clientHeight: number) => {
     const data = new Array(clientHeight).fill(0).map(() => new Array(clientWidth));
@@ -121,6 +125,15 @@ export default function GameOfLife() {
     setSimulationResult(simulationRef.current.clear());
   }
 
+  function onRenderEvent(e: RenderEvent) {
+    const time = new Date().getTime();
+    if (e === RenderEvent.START) {
+      renderingStartTimeRef.current = time;
+    } else if (e === RenderEvent.FINISH) {
+      setLastRenderingTime(time - renderingStartTimeRef.current);
+    }
+  }
+
   return (
     <>
       <Header title="Conway's Game of Life" />
@@ -131,8 +144,16 @@ export default function GameOfLife() {
           onViewportChanged={onViewportChanged}
           onHover={onHover}
           onClick={onClick}
-          onRightClick={onRightClick} />
-        <span className={styles.Frame}># {simulationResult?.frame ?? 0}</span>
+          onRightClick={onRightClick}
+          onRenderEvent={onRenderEvent} />
+        <div className={styles.Stats}>
+          <span className={styles.Frame}>
+            # {simulationResult?.frame ?? 0}
+          </span>
+          <span className={styles.Times}>
+            Simulation: {simulationResult?.simulationTime ?? 0}ms<br />
+            Rendering: {lastRenderingTime}ms
+          </span></div>
         <div className={styles.Control}>
           <ActionControl action={action} onActionSet={(action) => {
             if (action === Action.CLEAR) {
