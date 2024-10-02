@@ -188,7 +188,6 @@ export default function InteractionDetector({
       onMouseDown={onMouseDown}
       onTouchStart={onTouchDown}
       onTouchEnd={onNoHover}
-      onPointerOut={() => console.log('out')}
       onMouseUp={onMouseUp}
       onPointerMove={onMouseMove}
       onContextMenu={e => e.preventDefault()}>
