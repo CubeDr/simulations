@@ -39,6 +39,7 @@ export default function GameOfLife() {
   const [lastRenderingTime, setLastRenderingTime] = useState(0);
 
   const onViewportChanged = useCallback((viewport: Viewport, clientWidth: number, clientHeight: number) => {
+    renderingStartTimeRef.current = new Date().getTime();
     const data = new Array(clientHeight).fill(0).map(() => new Array(clientWidth));
 
     const zoomX = viewport.width / clientWidth;
@@ -100,6 +101,12 @@ export default function GameOfLife() {
     setSimulationResult(simulationRef.current.remove(x, y));
   }, [isRunning]);
 
+  const onRenderEvent = useCallback((e: RenderEvent) => {
+    if (e === RenderEvent.FINISH) {
+      setLastRenderingTime(new Date().getTime() - renderingStartTimeRef.current);
+    }
+  }, [setLastRenderingTime]);
+
   function prev() {
     const snapshot = simulationRef.current.prev();
     if (snapshot != null) {
@@ -123,15 +130,6 @@ export default function GameOfLife() {
   function clear() {
     timer.pause();
     setSimulationResult(simulationRef.current.clear());
-  }
-
-  function onRenderEvent(e: RenderEvent) {
-    const time = new Date().getTime();
-    if (e === RenderEvent.START) {
-      renderingStartTimeRef.current = time;
-    } else if (e === RenderEvent.FINISH) {
-      setLastRenderingTime(time - renderingStartTimeRef.current);
-    }
   }
 
   return (
