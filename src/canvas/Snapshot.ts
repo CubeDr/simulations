@@ -3,6 +3,8 @@ interface RenderingOptions {
   readonly offsetX: number;
   // [0.0, 1.0)
   readonly offsetY: number;
+  readonly scaleX: number;
+  readonly scaleY: number;
 }
 
 export default class Snapshot {
@@ -12,7 +14,7 @@ export default class Snapshot {
 
   readonly renderingOptions: RenderingOptions;
 
-  constructor(pixels: number[][], renderingOptions: RenderingOptions = { offsetX: 0, offsetY: 0 }) {
+  constructor(pixels: number[][], renderingOptions: RenderingOptions = { offsetX: 0, offsetY: 0, scaleX: 1, scaleY: 1 }) {
     this.width = pixels[0]?.length ?? 0;
     this.height = pixels.length;
     this.pixels = pixels;

@@ -41,8 +41,8 @@ export default function GameOfLife() {
   const onViewportChanged = useCallback((viewport: Viewport, clientWidth: number, clientHeight: number) => {
     renderingStartTimeRef.current = new Date().getTime();
 
-    const width = Math.ceil(viewport.width);
-    const height = Math.ceil(viewport.height);
+    const width = Math.ceil(viewport.width) + 1;
+    const height = Math.ceil(viewport.height) + 1;
 
     const data = new Array(height).fill(0).map(() => new Array(width));
 
@@ -67,6 +67,8 @@ export default function GameOfLife() {
     setSnapshot(new Snapshot(data, {
       offsetX: viewport.offsetX - Math.floor(viewport.offsetX),
       offsetY: viewport.offsetY - Math.floor(viewport.offsetY),
+      scaleX: width / viewport.width,
+      scaleY: height / viewport.height,
     }));
   }, [hoverPoint, setSnapshot, simulationResult]);
 

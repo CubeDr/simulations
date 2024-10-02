@@ -30,7 +30,7 @@ export default function InteractiveCanvas({
   onRightClick,
   onRenderEvent,
 }: Props) {
-  const [viewport, setViewport] = useState(new Viewport(0, 0, 100, 100 / document.documentElement.clientWidth * document.documentElement.clientHeight * 0.7));
+  const [viewport, setViewport] = useState(new Viewport(0, 0, 10, 10 / document.documentElement.clientWidth * document.documentElement.clientHeight * 0.7));
 
   const containerRef = useRef<HTMLDivElement>(null);
 

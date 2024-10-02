@@ -65,8 +65,8 @@ export default function Canvas({ snapshot, onResize, onRenderEvent }: Props) {
       for (let x = 0; x < width; x++) {
         const index = (y * width + x) * 4;
 
-        const snapshotX = Math.floor(snapshot.renderingOptions.offsetX + x * snapshot.width / width);
-        const snapshotY = Math.floor(snapshot.renderingOptions.offsetY + y * snapshot.height / height);
+        const snapshotX = Math.floor(snapshot.renderingOptions.offsetX + x * snapshot.width / width / snapshot.renderingOptions.scaleX);
+        const snapshotY = Math.floor(snapshot.renderingOptions.offsetY + y * snapshot.height / height / snapshot.renderingOptions.scaleY);
         const pixel = snapshotX < snapshot.width && snapshotY < snapshot.height
           ? snapshot.pixels[snapshotY][snapshotX]
           : 0x101213ff;

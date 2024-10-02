@@ -1,7 +1,7 @@
 import React, { MouseEvent, PropsWithChildren, useCallback, useEffect, useRef } from 'react';
 
 const MOVE_DRAG_THRESHOLD = 5;
-const ZOOM_FACTOR = 101 / 100;
+const ZOOM_FACTOR = 3 / 2;
 
 interface Props {
   onClick: (x: number, y: number) => void;
