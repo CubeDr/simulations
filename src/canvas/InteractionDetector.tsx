@@ -1,6 +1,7 @@
 import React, { MouseEvent, PropsWithChildren, useCallback, useEffect, useRef } from 'react';
 
 const MOVE_DRAG_THRESHOLD = 5;
+const ZOOM_FACTOR = 101 / 100;
 
 interface Props {
   onClick: (x: number, y: number) => void;
@@ -166,7 +167,7 @@ export default function InteractionDetector({
       e.preventDefault();
       e.stopPropagation();
 
-      onZoom(x(e.clientX), y(e.clientY), e.deltaY > 0 ? 2 / 3 : 3 / 2);
+      onZoom(x(e.clientX), y(e.clientY), e.deltaY > 0 ? 1 / ZOOM_FACTOR : ZOOM_FACTOR);
     }
 
     const container = containerRef.current!;
