@@ -61,9 +61,9 @@
 
 .Fill,
 .Erase {
-  margin: 5px;
-  height: calc(100% - 10px);
-  width: calc(100% - 10px);
+  margin: 6px;
+  height: calc(100% - 12px);
+  width: calc(100% - 12px);
 }
 
 .Move {
