@@ -40,15 +40,16 @@ export default function GameOfLife() {
 
   const onViewportChanged = useCallback((viewport: Viewport, clientWidth: number, clientHeight: number) => {
     renderingStartTimeRef.current = new Date().getTime();
-    const data = new Array(clientHeight).fill(0).map(() => new Array(clientWidth));
 
-    const zoomX = viewport.width / clientWidth;
-    const zoomY = viewport.height / clientHeight;
+    const width = Math.ceil(viewport.width);
+    const height = Math.ceil(viewport.height);
 
-    for (let y = 0; y < clientHeight; y++) {
-      for (let x = 0; x < clientWidth; x++) {
-        const viewportX = Math.floor(viewport.offsetX + x * zoomX);
-        const viewportY = Math.floor(viewport.offsetY + y * zoomY);
+    const data = new Array(height).fill(0).map(() => new Array(width));
+
+    for (let y = 0; y < height; y++) {
+      for (let x = 0; x < width; x++) {
+        const viewportX = Math.floor(viewport.offsetX + x);
+        const viewportY = Math.floor(viewport.offsetY + y);
 
         if (viewportX === hoverPoint?.x && viewportY === hoverPoint?.y) {
           // Hover
