@@ -1,5 +1,7 @@
 import { Metadata } from 'next';
 
+import 'hyuni-style';
+
 export const metadata: Metadata = {
   title: 'Online Simulations - Hyuni Kim',
   authors: {
