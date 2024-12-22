@@ -1,3 +1,5 @@
+'use client';
+
 import { useCallback, useEffect, useRef, useState } from 'react';
 import Canvas, { RenderEvent } from './Canvas';
 import InteractionDetector from './InteractionDetector';

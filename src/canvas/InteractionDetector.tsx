@@ -1,3 +1,5 @@
+'use client';
+
 import React, { MouseEvent, PointerEvent, PropsWithChildren, useCallback, useEffect, useRef } from 'react';
 
 const MOVE_DRAG_THRESHOLD = 5;
