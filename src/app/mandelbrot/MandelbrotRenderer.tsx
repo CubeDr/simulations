@@ -35,7 +35,7 @@ const MandelbrotRenderer: React.FC<Props> = ({ viewport }) => {
 
       int mandelbrot(vec2 c) {
         vec2 z = vec2(0.0);
-        for (int i = 0; i < 256; i++) {
+        for (int i = 0; i < 512; i++) {
           z = vec2(z.x * z.x - z.y * z.y, 2.0 * z.x * z.y) + c;
           if (dot(z, z) > 4.0) {
             return i;
