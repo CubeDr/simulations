@@ -6,6 +6,8 @@ export default function Homepage() {
     <>
       <Header />
       <Link href='/game-of-life'>Conway's Game Of Life</Link>
+      <br />
+      <Link href='/mandelbrot'>Mandelbrot Set - Fractal</Link>
     </>
   );
 }
