@@ -1,9 +1,11 @@
+'use client';
+
 import { useCallback, useRef, useState } from 'react';
-import { RenderEvent } from '../canvas/Canvas';
-import InteractiveCanvas, { DragBehavior } from '../canvas/InteractiveCanvas';
-import Snapshot from '../canvas/Snapshot';
-import Viewport from '../canvas/Viewport';
-import Header from '../Header';
+import { RenderEvent } from '../../canvas/Canvas';
+import InteractiveCanvas, { DragBehavior } from '../../canvas/InteractiveCanvas';
+import Snapshot from '../../canvas/Snapshot';
+import Viewport from '../../canvas/Viewport';
+import Header from '../../Header';
 import ActionControl, { Action } from './ActionControl';
 import styles from './GameOfLife.module.css';
 import Point from './Point';

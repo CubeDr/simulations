@@ -1,9 +1,13 @@
+'use client';
+
 import { useEffect } from 'react';
 import styles from './Header.module.css';
 
 interface Props {
   title?: string;
 }
+
+
 
 export default function Header({ title }: Props) {
   useEffect(() => {

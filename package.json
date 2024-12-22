@@ -10,6 +10,7 @@
     "@types/node": "^16.18.112",
     "@types/react": "^18.3.10",
     "@types/react-dom": "^18.3.0",
+    "next": "^15.1.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.26.2",
@@ -18,10 +19,9 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "eject": "react-scripts eject",
-    "deploy": "npm run build && gh-pages -d build"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "npx serve@latest ./build"
   },
   "eslintConfig": {
     "extends": [
